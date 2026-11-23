@@ -1,0 +1,14 @@
+; Engine configuration file.
+; Minimal Godot 4.7 project used by the gd2nds milestone 1 test.
+
+config_version=5
+
+[application]
+
+config/name="Hello DS"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+
+[display]
+
+window/size/viewport_width=256
+window/size/viewport_height=192

@@ -1,0 +1,5 @@
+/target
+.gd2nds/
+/build/
+*.nds
+*.elf

@@ -1,0 +1,9 @@
+[package]
+name = "gd2nds"
+description = "Compile Godot 4 projects to Nintendo DS ROMs"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]

@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - run: cargo fmt --all --check
+      - run: cargo clippy --all-targets -- -D warnings
+      - run: cargo test
+
+  rom:
+    # Builds the hello test project into a .nds with the official BlocksDS image.
+    runs-on: ubuntu-latest
+    needs: rust
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Generate build directory
+        run: cargo run --release -- build tests/projects/hello --out build/hello --emit-only
+      - name: Build ROM with BlocksDS
+        run: |
+          docker run --rm -v "$PWD:/work" -w /work/build/hello \
+            --user "$(id -u):$(id -g)" \
+            skylyrac/blocksds:slim-latest make
+          ls -l build/hello/*.nds
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hello-ds-rom
+          path: build/hello/*.nds
